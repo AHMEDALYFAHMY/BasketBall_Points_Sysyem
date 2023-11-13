@@ -1,25 +1,42 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_training_test/cubit/cubit.dart';
+import 'package:flutter_training_test/cubit/states.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(BasketballPointsSys());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  int teamAPoints = 0;
-  int teamBPoints = 0;
+class BasketballPointsSys extends StatelessWidget {
+  const BasketballPointsSys({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return BlocProvider(
+        create: (context) => PointsSystemCubit(),
+        child: MaterialApp(debugShowCheckedModeBanner: false, home: Home()),
+      );
+  }
+}
+ 
+class Home extends StatelessWidget {
+  Home({super.key});
+  int teamApoints = 0;
+  int teambpoints = 0;
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<PointsSystemCubit, PointsSystemState>(
+      listener: (context, state) {
+        if (state is AddPointsAState) {
+          teamApoints = BlocProvider.of<PointsSystemCubit>(context).teamApionts;
+        } else {
+          teambpoints = BlocProvider.of<PointsSystemCubit>(context).teamBpionts;
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.orange,
             title: const Text('PointsCounter APP'),
@@ -38,13 +55,13 @@ class _MyAppState extends State<MyApp> {
                         Text(
                           'Team A',
                           style: TextStyle(
-                            fontSize: 42,
+                            fontSize: 40,
                           ),
                         ),
                         Text(
-                          '$teamAPoints',
+                          '${BlocProvider.of<PointsSystemCubit>(context).teamApionts}',
                           style: TextStyle(
-                            fontSize: 150,
+                            fontSize: 120,
                           ),
                         ),
                         SizedBox(
@@ -52,9 +69,8 @@ class _MyAppState extends State<MyApp> {
                         ),
                         MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              teamAPoints++;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 1, team: 'A');
                           },
                           color: Colors.orange,
                           child: Text('Add 1 Point'),
@@ -64,9 +80,8 @@ class _MyAppState extends State<MyApp> {
                         ),
                         MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              teamAPoints = teamAPoints + 2;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 2, team: 'A');
                           },
                           color: Colors.orange,
                           child: Text('Add 2 Point'),
@@ -77,9 +92,8 @@ class _MyAppState extends State<MyApp> {
                         MaterialButton(
                           minWidth: 70,
                           onPressed: () {
-                            setState(() {
-                              teamAPoints = teamAPoints + 3;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 3, team: 'A');
                           },
                           color: Colors.orange,
                           child: Text('Add 3 Point'),
@@ -98,13 +112,13 @@ class _MyAppState extends State<MyApp> {
                         Text(
                           'Team B',
                           style: TextStyle(
-                            fontSize: 42,
+                            fontSize: 40,
                           ),
                         ),
                         Text(
-                          '$teamBPoints',
+                          '${BlocProvider.of<PointsSystemCubit>(context).teamBpionts}',
                           style: TextStyle(
-                            fontSize: 150,
+                            fontSize: 120,
                           ),
                         ),
                         SizedBox(
@@ -112,9 +126,8 @@ class _MyAppState extends State<MyApp> {
                         ),
                         MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              teamBPoints++;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 1, team: 'B');
                           },
                           color: Colors.orange,
                           child: Text('Add 1 Point'),
@@ -124,9 +137,8 @@ class _MyAppState extends State<MyApp> {
                         ),
                         MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              teamBPoints = teamBPoints + 2;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 2, team: 'B');
                           },
                           color: Colors.orange,
                           child: Text('Add 2 Point'),
@@ -136,9 +148,8 @@ class _MyAppState extends State<MyApp> {
                         ),
                         MaterialButton(
                           onPressed: () {
-                            setState(() {
-                              teamBPoints = teamBPoints + 3;
-                            });
+                            BlocProvider.of<PointsSystemCubit>(context)
+                                .addPoints(buttonNumber: 3, team: 'B');
                           },
                           color: Colors.orange,
                           child: Text('Add 3 Point'),
@@ -152,12 +163,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    setState(() {
-                      teamAPoints = 0;
-                    });
-                    setState(() {
-                      teamBPoints = 0;
-                    });
+                    BlocProvider.of<PointsSystemCubit>(context).ResetPoinst();
                   },
                   color: Colors.orange,
                   child: Text('Reset'),
@@ -165,6 +171,8 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
           ),
-        ));
+        );
+      },
+    );
   }
 }
