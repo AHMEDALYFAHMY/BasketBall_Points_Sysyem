@@ -1,9 +1,12 @@
-abstract class PointsSystemState{}
+import 'package:flutter_training_test/data/model/character.dart';
 
-class InitialState extends PointsSystemState{}
+abstract class CharactersState {}
 
-class AddPointsAState extends PointsSystemState{}
+class InitialState extends CharactersState {}
 
-class RestPiontsState extends PointsSystemState{}
+class LoadedCharactersState extends CharactersState {
+  final List<Character> character;
 
-class AddPointBsAState extends PointsSystemState{}
+  LoadedCharactersState({required this.character});
+}
+
