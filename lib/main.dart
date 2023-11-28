@@ -2,10 +2,8 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_training_test/helpers/app_router.dart';
-import 'package:flutter_training_test/cubit/cubit.dart';
 
 void main() {
   runApp(CharctersApp(
@@ -21,12 +19,9 @@ class CharctersApp extends StatelessWidget {
   final AppRouter appRouter;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CharactersCubit(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: appRouter.onGenerateRoutes,
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: appRouter.onGenerateRoutes,
     );
   }
 }

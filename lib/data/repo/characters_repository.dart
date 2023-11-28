@@ -6,8 +6,7 @@ class CharactersRepo {
 
   CharactersRepo({required this.charactersWebServices});
   Future<List<Character>> getAllCharacters() async {
-    final char = await charactersWebServices.getAllCharacters(); 
-    // mapper 
-    return  char.map((char) => Character.fromJson(char)).toList();// output == list
+    final characters = await charactersWebServices.getAllCharacters();
+    return characters.map<Character>((chara) => Character.fromJson(chara)).toList();
   }
 }
